@@ -6,6 +6,15 @@ import { useState } from "react";
 function App() {
   const [montantInitial, setMontantInitial] = useState(1000);
   const [tauxInteret, setTauxInteret] = useState(2.0);
+  const [interets, setInterets] = useState(0);
+
+  /**
+   *
+   */
+  function calculerInterets() {
+    const interetsCalcules = (montantInitial * tauxInteret) / 100;
+    setInterets(interetsCalcules);
+  }
 
   return (
     <div>
@@ -28,8 +37,11 @@ function App() {
         />
       </div>
 
+      <button onClick={calculerInterets}>Calculer les intérets</button>
+
       <p>Montant saisi : {montantInitial} €</p>
       <p>Taux d&#39;intérêt : {tauxInteret} %</p>
+      <p>Intérêts générés : {interets} €</p>
     </div>
   );
 }
