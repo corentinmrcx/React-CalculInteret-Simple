@@ -7,12 +7,17 @@ function App() {
   const [montantInitial, setMontantInitial] = useState(1000);
   const [tauxInteret, setTauxInteret] = useState(2.0);
   const [interets, setInterets] = useState(0);
+  const [duree, setDuree] = useState(12);
 
   /**
    *
    */
   function calculerInterets() {
-    const interetsCalcules = (montantInitial * tauxInteret) / 100;
+    const tauxMensuel = tauxInteret / 100 / 12;
+    const nombreQuinzaines = Math.floor(duree * 2);
+
+    const interetsCalcules =
+      montantInitial * tauxMensuel * (nombreQuinzaines / 2);
     setInterets(interetsCalcules);
   }
 
@@ -36,12 +41,20 @@ function App() {
           onChange={(e) => setTauxInteret(parseFloat(e.target.value))}
         />
       </div>
-
+      <div>
+        <label>Durée (mois) :</label>
+        <input
+          type="number"
+          value={duree}
+          onChange={(e) => setDuree(parseInt(e.target.value, 10))}
+        />
+      </div>
       <button onClick={calculerInterets}>Calculer les intérets</button>
 
-      <p>Montant saisi : {montantInitial} €</p>
-      <p>Taux d&#39;intérêt : {tauxInteret} %</p>
-      <p>Intérêts générés : {interets} €</p>
+      <p>💰 Montant saisi : {montantInitial} €</p>
+      <p>📈 Taux d&#39;intérêt : {tauxInteret} %</p>
+      <p>⏳ Durée : {duree} mois</p>
+      <p>🔢 Intérêts générés : {interets} €</p>
     </div>
   );
 }
