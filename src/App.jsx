@@ -14,21 +14,34 @@ function App() {
     montant: 0,
     date: "",
     type: "versement",
+    taux: 0,
   });
 
   /**
    * Fonction qui permet d'ajouter une oppération (versement ou retrait)
    */
   function ajouterOperation() {
-    if (!nouvelleOperation.date || nouvelleOperation.montant === 0) {
+    if (
+      !nouvelleOperation.date ||
+      (nouvelleOperation.montant === 0 && nouvelleOperation.type !== "taux")
+    ) {
       throw new Error("Nouvelle operation doesn't match");
     }
 
     setOperations([
       ...operations,
-      { ...nouvelleOperation, montant: parseFloat(nouvelleOperation.montant) },
+      {
+        ...nouvelleOperation,
+        montant: parseFloat(nouvelleOperation.montant),
+        taux: parseFloat(nouvelleOperation.taux),
+      },
     ]);
-    setNouvelleOperation({ montant: 0, date: "", type: "versement" });
+    setNouvelleOperation({
+      montant: 0,
+      date: "",
+      type: "versement",
+      taux: tauxInteret,
+    });
   }
 
   /**
@@ -37,6 +50,7 @@ function App() {
   function calculerInterets() {
     const nbQuinzaines = duree * 2;
     const soldesParQuinzaine = new Array(nbQuinzaines).fill(montantInitial);
+    const tauxParQuinzaines = new Array(nbQuinzaines).fill(tauxInteret);
     let interetsCumules = 0;
 
     const operationsTriees = [...operations].sort(
@@ -58,11 +72,16 @@ function App() {
         for (let i = indexQuinzaine; i < soldesParQuinzaine.length; i++) {
           soldesParQuinzaine[i] -= op.montant;
         }
+      } else if (op.type === "taux") {
+        for (let i = indexQuinzaine; i < soldesParQuinzaine.length; i++) {
+          tauxParQuinzaines[i] = op.taux;
+        }
       }
     });
 
     for (let i = 0; i < soldesParQuinzaine.length; i++) {
-      interetsCumules += (soldesParQuinzaine[i] * tauxInteret * 15) / 36000;
+      interetsCumules +=
+        (soldesParQuinzaine[i] * tauxParQuinzaines[i] * 15) / 36000;
     }
 
     setInterets(interetsCumules.toFixed(2));
@@ -110,21 +129,40 @@ function App() {
         >
           <option value="versement">Versement</option>
           <option value="retrait">Retrait</option>
+          <option value="taux">Taux</option>
         </select>
       </div>
 
       <div>
-        <label>Montant (€) :</label>
-        <input
-          type="number"
-          value={nouvelleOperation.montant}
-          onChange={(e) =>
-            setNouvelleOperation({
-              ...nouvelleOperation,
-              montant: e.target.value,
-            })
-          }
-        />
+        {nouvelleOperation.type === "taux" ? (
+          <div>
+            <label>Nouveau taux (%) :</label>
+            <input
+              type="number"
+              value={nouvelleOperation.taux}
+              onChange={(e) =>
+                setNouvelleOperation({
+                  ...nouvelleOperation,
+                  taux: e.target.value,
+                })
+              }
+            />
+          </div>
+        ) : (
+          <div>
+            <label>Montant (€) :</label>
+            <input
+              type="number"
+              value={nouvelleOperation.montant}
+              onChange={(e) =>
+                setNouvelleOperation({
+                  ...nouvelleOperation,
+                  montant: e.target.value,
+                })
+              }
+            />
+          </div>
+        )}
       </div>
 
       <div>
@@ -144,7 +182,13 @@ function App() {
       <ul>
         {operations.map((op, index) => (
           <li key={index}>
-            {op.type === "versement" ? "➕" : "➖"} {op.montant} € le {op.date}
+            {op.type === "versement"
+              ? "➕"
+              : op.type === "retrait"
+                ? "➖"
+                : "🔄"}{" "}
+            {op.type === "taux" ? `${op.taux} %` : `${op.montant} €`} le{" "}
+            {op.date}
           </li>
         ))}
       </ul>
