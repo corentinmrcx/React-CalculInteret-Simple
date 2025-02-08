@@ -12,7 +12,7 @@ function App() {
   const [operations, setOperations] = useState([]);
   const [nouvelleOperation, setNouvelleOperation] = useState({
     montant: 0,
-    date: "today",
+    date: "",
     type: "versement",
   });
 
@@ -28,30 +28,44 @@ function App() {
       ...operations,
       { ...nouvelleOperation, montant: parseFloat(nouvelleOperation.montant) },
     ]);
-    setNouvelleOperation({ montant: 0, date: "today", type: "versement" });
+    setNouvelleOperation({ montant: 0, date: "", type: "versement" });
   }
 
   /**
-   *
+   * Fonction qui permet de calculer les interets de chaque quinzaine
    */
   function calculerInterets() {
-    let solde = montantInitial;
-    let interetsTotal = 0;
-    const nbrQuinzaine = duree * 2;
+    const nbQuinzaines = duree * 2;
+    const soldesParQuinzaine = new Array(nbQuinzaines).fill(montantInitial);
+    let interetsCumules = 0;
 
-    for (let quinzaine = 0; quinzaine < nbrQuinzaine; quinzaine++) {
-      interetsTotal += (solde * tauxInteret * 15) / 36000;
+    const operationsTriees = [...operations].sort(
+      (a, b) => new Date(a.date) - new Date(b.date),
+    );
 
-      operations.forEach((operation) => {
-        if (operation.type === "versement") {
-          solde += operation.montant;
-        } else if (operation.type === "retrait") {
-          solde -= operation.montant;
+    operationsTriees.forEach((op) => {
+      const dateOp = new Date(op.date);
+      const jourOp = dateOp.getDate();
+      const moisOp = dateOp.getMonth();
+
+      const indexQuinzaine = moisOp * 2 + (jourOp > 15 ? 1 : 0);
+
+      if (op.type === "versement") {
+        for (let i = indexQuinzaine + 1; i < soldesParQuinzaine.length; i++) {
+          soldesParQuinzaine[i] += op.montant;
         }
-      });
+      } else if (op.type === "retrait") {
+        for (let i = indexQuinzaine; i < soldesParQuinzaine.length; i++) {
+          soldesParQuinzaine[i] -= op.montant;
+        }
+      }
+    });
+
+    for (let i = 0; i < soldesParQuinzaine.length; i++) {
+      interetsCumules += (soldesParQuinzaine[i] * tauxInteret * 15) / 36000;
     }
 
-    setInterets(interetsTotal);
+    setInterets(interetsCumules.toFixed(2));
   }
 
   return (
