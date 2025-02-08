@@ -197,9 +197,9 @@ function App() {
                       ? "➕"
                       : op.type === "retrait"
                         ? "➖"
-                        : "🔄"}{" "}
+                        : "〽️"}{" "}
                     {op.type === "taux" ? `${op.taux} %` : `${op.montant} €`} le{" "}
-                    {op.date}
+                    {new Date(op.date).toLocaleDateString("fr-FR")}
                   </li>
                 ))}
               </ul>
