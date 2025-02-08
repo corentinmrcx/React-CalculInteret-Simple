@@ -1,0 +1,144 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #121212;
+    color: white;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    min-height: 100vh;
+    width: 100vw;
+}
+
+h2 {
+    margin-bottom: 10px;
+}
+#root {
+    width: 70%;
+}
+
+.app {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+
+    padding: 50px;
+
+    box-shadow: 0 0 10px rgb(30, 136, 229);
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+}
+
+.title {
+    text-align: center;
+    margin: 0;
+}
+
+.content {
+    display: flex;
+    gap: 20px;
+
+    width: 100%;
+}
+
+.left, .right {
+    flex: 1;
+}
+
+.right {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.right p {
+    margin-bottom: 10px;
+}
+
+.right p span{
+    font-weight: bold;
+}
+
+.separator {
+    width: 2px;
+    height: auto;
+    margin: 0 20px;
+
+    background-color: white;
+    opacity: 0.5;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    margin-bottom: 5px;
+}
+
+.input-group input, .input-group select {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+
+    border-radius: 5px;
+    border: none;
+
+    background-color: #B0B0B0;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+
+    border: none;
+    border-radius: 5px;
+
+    background-color: #1e88e5;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #1565c0;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+ul li {
+    margin-bottom: 10px;
+}
+
+@media (max-width: 1000px) {
+    #root {
+        width: 90%;
+        padding: 50px 0 50px 0;
+    }
+
+    .content {
+        flex-direction: column;
+    }
+
+    .separator {
+        display: none;
+    }
+}

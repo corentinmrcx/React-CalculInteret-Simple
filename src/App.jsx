@@ -88,118 +88,142 @@ function App() {
   }
 
   return (
-    <div>
-      <h1>Calcul des Intérêts Simples</h1>
+    <div className="app">
+      <div className="container">
+        <h1 className="title">Calcul des Intérêts Simples</h1>
+        <div className="content">
+          <div className="left">
+            <div className="input-group">
+              <label>Montant initial (€) :</label>
+              <input
+                type="number"
+                value={montantInitial}
+                onChange={(e) => setMontantInitial(parseFloat(e.target.value))}
+              />
+            </div>
 
-      <div>
-        <label>Montant initial (€) :</label>
-        <input
-          type="number"
-          value={montantInitial}
-          onChange={(e) => setMontantInitial(parseFloat(e.target.value))}
-        />
-      </div>
+            <div className="input-group">
+              <label>Taux d&#39;intérêt annuel (%) :</label>
+              <input
+                type="number"
+                value={tauxInteret}
+                onChange={(e) => setTauxInteret(parseFloat(e.target.value))}
+              />
+            </div>
 
-      <div>
-        <label>Taux d&#39;intérêt annuel (%) :</label>
-        <input
-          type="number"
-          value={tauxInteret}
-          onChange={(e) => setTauxInteret(parseFloat(e.target.value))}
-        />
-      </div>
+            <div className="input-group">
+              <label>Durée (mois) :</label>
+              <input
+                type="number"
+                value={duree}
+                onChange={(e) => setDuree(parseInt(e.target.value, 10))}
+              />
+            </div>
 
-      <div>
-        <label>Durée (mois) :</label>
-        <input
-          type="number"
-          value={duree}
-          onChange={(e) => setDuree(parseInt(e.target.value, 10))}
-        />
-      </div>
+            <h2>Ajouter une opération</h2>
+            <div className="input-group">
+              <label>Type :</label>
+              <select
+                value={nouvelleOperation.type}
+                onChange={(e) =>
+                  setNouvelleOperation({
+                    ...nouvelleOperation,
+                    type: e.target.value,
+                  })
+                }
+              >
+                <option value="versement">Versement</option>
+                <option value="retrait">Retrait</option>
+                <option value="taux">Taux</option>
+              </select>
+            </div>
 
-      <h2>Ajouter une opération</h2>
-      <div>
-        <label>Type :</label>
-        <select
-          value={nouvelleOperation.type}
-          onChange={(e) =>
-            setNouvelleOperation({ ...nouvelleOperation, type: e.target.value })
-          }
-        >
-          <option value="versement">Versement</option>
-          <option value="retrait">Retrait</option>
-          <option value="taux">Taux</option>
-        </select>
-      </div>
+            {nouvelleOperation.type === "taux" ? (
+              <div className="input-group">
+                <label>Nouveau taux (%) :</label>
+                <input
+                  type="number"
+                  value={nouvelleOperation.taux}
+                  onChange={(e) =>
+                    setNouvelleOperation({
+                      ...nouvelleOperation,
+                      taux: e.target.value,
+                    })
+                  }
+                />
+              </div>
+            ) : (
+              <div className="input-group">
+                <label>Montant (€) :</label>
+                <input
+                  type="number"
+                  value={nouvelleOperation.montant}
+                  onChange={(e) =>
+                    setNouvelleOperation({
+                      ...nouvelleOperation,
+                      montant: e.target.value,
+                    })
+                  }
+                />
+              </div>
+            )}
 
-      <div>
-        {nouvelleOperation.type === "taux" ? (
-          <div>
-            <label>Nouveau taux (%) :</label>
-            <input
-              type="number"
-              value={nouvelleOperation.taux}
-              onChange={(e) =>
-                setNouvelleOperation({
-                  ...nouvelleOperation,
-                  taux: e.target.value,
-                })
-              }
-            />
+            <div className="input-group">
+              <label>Date :</label>
+              <input
+                type="date"
+                value={nouvelleOperation.date}
+                onChange={(e) =>
+                  setNouvelleOperation({
+                    ...nouvelleOperation,
+                    date: e.target.value,
+                  })
+                }
+              />
+            </div>
+
+            <button onClick={ajouterOperation}>Ajouter l&#39;opération</button>
           </div>
-        ) : (
-          <div>
-            <label>Montant (€) :</label>
-            <input
-              type="number"
-              value={nouvelleOperation.montant}
-              onChange={(e) =>
-                setNouvelleOperation({
-                  ...nouvelleOperation,
-                  montant: e.target.value,
-                })
-              }
-            />
+
+          <div className="separator"></div>
+
+          <div className="right">
+            <div>
+              <h2>Opérations</h2>
+              <ul>
+                {operations.map((op, index) => (
+                  <li key={index}>
+                    {op.type === "versement"
+                      ? "➕"
+                      : op.type === "retrait"
+                        ? "➖"
+                        : "🔄"}{" "}
+                    {op.type === "taux" ? `${op.taux} %` : `${op.montant} €`} le{" "}
+                    {op.date}
+                  </li>
+                ))}
+              </ul>
+
+              <button onClick={calculerInterets}>Calculer les Intérêts</button>
+            </div>
+            <div>
+              <h2>Résultat</h2>
+              <p>
+                💰 Montant initial : <span>{montantInitial} €</span>
+              </p>
+              <p>
+                📈 Taux d&#39;intérêt : <span>{tauxInteret} %</span>
+              </p>
+              <p>
+                ⏳ Durée : <span>{duree} mois</span>
+              </p>
+              <p>
+                🔢 Intérêts générés : <span>{interets} €</span>
+              </p>
+            </div>
           </div>
-        )}
+        </div>
       </div>
-
-      <div>
-        <label>Date :</label>
-        <input
-          type="date"
-          value={nouvelleOperation.date}
-          onChange={(e) =>
-            setNouvelleOperation({ ...nouvelleOperation, date: e.target.value })
-          }
-        />
-      </div>
-
-      <button onClick={ajouterOperation}>Ajouter l&#39;opération</button>
-
-      <h2>Opérations</h2>
-      <ul>
-        {operations.map((op, index) => (
-          <li key={index}>
-            {op.type === "versement"
-              ? "➕"
-              : op.type === "retrait"
-                ? "➖"
-                : "🔄"}{" "}
-            {op.type === "taux" ? `${op.taux} %` : `${op.montant} €`} le{" "}
-            {op.date}
-          </li>
-        ))}
-      </ul>
-
-      <button onClick={calculerInterets}>Calculer les Intérêts</button>
-
-      <h2>Résultat</h2>
-      <p>💰 Montant initial : {montantInitial} €</p>
-      <p>📈 Taux d&#39;intérêt : {tauxInteret} %</p>
-      <p>⏳ Durée : {duree} mois</p>
-      <p>🔢 Intérêts générés : {interets} €</p>
     </div>
   );
 }
