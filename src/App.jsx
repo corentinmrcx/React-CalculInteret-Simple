@@ -25,7 +25,7 @@ function App() {
       !nouvelleOperation.date ||
       (nouvelleOperation.montant === 0 && nouvelleOperation.type !== "taux")
     ) {
-      throw new Error("Nouvelle operation doesn't match");
+      return;
     }
 
     setOperations([
@@ -87,6 +87,14 @@ function App() {
     setInterets(interetsCumules.toFixed(2));
   }
 
+  /**
+   *
+   * @param index
+   */
+  function supprimerOperation(index) {
+    setOperations(operations.filter((_, i) => i !== index));
+  }
+
   return (
     <div className="app">
       <div className="container">
@@ -97,6 +105,7 @@ function App() {
               <label>Montant initial (€) :</label>
               <input
                 type="number"
+                min="0"
                 value={montantInitial}
                 onChange={(e) => setMontantInitial(parseFloat(e.target.value))}
               />
@@ -157,6 +166,7 @@ function App() {
                 <label>Montant (€) :</label>
                 <input
                   type="number"
+                  min="0"
                   value={nouvelleOperation.montant}
                   onChange={(e) =>
                     setNouvelleOperation({
@@ -200,6 +210,9 @@ function App() {
                         : "〽️"}{" "}
                     {op.type === "taux" ? `${op.taux} %` : `${op.montant} €`} le{" "}
                     {new Date(op.date).toLocaleDateString("fr-FR")}
+                    <button onClick={() => supprimerOperation(index)}>
+                      ❌
+                    </button>
                   </li>
                 ))}
               </ul>

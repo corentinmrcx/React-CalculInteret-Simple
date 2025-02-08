@@ -70,6 +70,16 @@ h2 {
     font-weight: bold;
 }
 
+.right ul li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.right ul li button {
+    width: auto;
+}
+
 .separator {
     width: 2px;
     height: auto;
