@@ -16,8 +16,8 @@ Cette application permet de calculer les intérêts simples en fonction d'un mon
 Clonez ce dépôt et installez les dépendances :
 ```bash
 # Cloner le dépôt
-git clone https://github.com/votre-repo.git
-cd votre-repo
+git clone https://github.com/corentinmrcx/React-CalculInteret-Simple.git
+cd React-CalculInteret-Simple
 
 # Installer les dépendances
 npm install   # ou yarn install
@@ -27,7 +27,7 @@ npm install   # ou yarn install
 ```bash
 npm start   # ou yarn start
 ```
-L'application sera accessible à l'adresse : `http://localhost:3000/`
+L'application sera accessible à l'adresse : `http://localhost:3000/` ou `http://localhost:5173/`
 
 ## 📊 Fonctionnalités
 - Saisie du montant initial, de la durée et du taux d'intérêt
